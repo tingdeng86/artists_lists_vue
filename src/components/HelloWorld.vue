@@ -4,10 +4,12 @@
     <input type="text" v-model="searching" />
     <button v-on:click="showForm()">Add artist</button>
     <div class="add-info">
-      <input v-if="shown" v-model="name" placeholder="Artist Name" /><br />
-      <input v-if="shown" v-model="review" placeholder="About artist" /><br />
+      <input v-if="shown" v-model="$v.name.$model" placeholder="Artist Name"  v-on:blur="$v.name.$touch()"/><br />
+      <div v-if="$v.name.$dirty && !$v.name.required">Name is required</div>
+      <input v-if="shown" v-model="$v.review.$model" placeholder="About artist" v-on:blur="$v.review.$touch()"/><br />
+      <div v-if="$v.review.$dirty && !$v.review.required">The review of artist is required</div>
       <input v-if="shown" v-model="imageUrl" placeholder="Image url" /><br />
-      <button v-if="shown" v-on:click="addArtist()">Add</button>
+      <button v-if="shown" v-on:click="addArtist()" :disabled="!$v.name.required ||!$v.review.required">Add</button>
     </div>
     <div v-if="shownLists " class="artists">
       <div
@@ -28,6 +30,7 @@
   </div>
 </template>
 <script>
+import {required} from 'vuelidate/lib/validators'
 export default {
   name: "HelloWorld",
   data() {
@@ -51,7 +54,7 @@ export default {
       this.shown = false;
 
       let addedArtist = {
-        ...addedArtist,
+        ...this.addedArtist,
         name: this.name,
         review: this.review,
         imageUrl: this.imageUrl,
@@ -59,13 +62,21 @@ export default {
       this.artists = [...this.artists, addedArtist];
       this.shownLists = true;
       console.log(this.artists);
-      this.name = "";
-      this.review = "";
-      this.imageUrl = "";
+      this.name = '';
+      this.review = '';
+      this.imageUrl = '';
   
     },
     removeArtist: function (i) {
       this.artists.splice(i, 1);
+    },
+  },
+  validations: {
+    name:{
+      required
+    },
+    review:{
+      required
     },
   },
   computed: {
@@ -76,11 +87,11 @@ export default {
         return this.artists.filter((item) => {
           return (
             item.name.toLowerCase().indexOf(this.searching.toLowerCase()) > -1
-          );
-        });
+          )
+        })
       }
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped>
@@ -118,3 +129,4 @@ input {
   background: red;
 }
 </style>
+/* eslint-disable */
