@@ -5,11 +5,11 @@
     <button v-on:click="showForm()">Add artist</button>
     <div class="add-info" v-if="shown" >
       <input v-model="$v.name.$model" placeholder="Artist Name"  v-on:blur="$v.name.$touch()"/><br />
-      <div v-if="$v.name.$dirty && !$v.name.required">Name is required</div>
+      <!-- <div v-if="$v.name.$dirty && !$v.name.required">Name is required</div> -->
       <input v-model="$v.review.$model" placeholder="About artist" v-on:blur="$v.review.$touch()"/><br />
-      <div v-if="$v.review.$dirty && !$v.review.required">The review of artist is required</div>
+      <!-- <div v-if="$v.review.$dirty && !$v.review.required">The introduction of artist is required</div> -->
       <input v-model="imageUrl" placeholder="Image url" /><br />
-      <button  v-on:click="addArtist()" :disabled="!$v.name.required ||!$v.review.required">Add</button>
+      <button  v-on:click="addArtist()" :disabled="!$v.name.required ||!$v.review.required ">Add</button>
     </div>
     <div v-if="shownLists " class="artists">
       <div
@@ -49,6 +49,7 @@ export default {
     showForm: function () {
       this.shown = true;
       this.shownLists = false;
+      
     },
     addArtist: function () {
       this.shown = false;
